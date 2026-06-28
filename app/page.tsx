@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 import Navbar from "@/components/Navbar";
 import NewArrivals from "@/components/NewArrivals";
@@ -10,6 +11,7 @@ export default function Home() {
       <Hero />
       <NewArrivals />
       <Testimonials />
+      <Footer />
     </div>
   );
 }
