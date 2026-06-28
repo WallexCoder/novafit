@@ -11,7 +11,7 @@ export default function Hero() {
       <div className="absolute inset-0 bg-black/60" />
 
         <div className="relative z-10 px-12 mx-auto text-center">
-            <p className="text-white text-2xl font-extrabold uppercase tracking-widest mb-3">
+            <p className="text-white text-2xl font-extrabold font-serif uppercase tracking-widest mb-3">
               Fall Essentials
             </p>
             {/* <h2 className="text-cream text-xl md:text-5xl font-bold mb-6 text-center">
@@ -23,9 +23,9 @@ export default function Hero() {
             </div>
 
             <div className="flex gap-4 justify-center">
-                <a href="/products?category=men"className="bg-[#6E473B] text-white px-6 py-3 rounded-md font-bold hover:bg-cocoa hover:text-cream transition">Shop Men</a>
+                <a href="/products?category=men"className="bg-[#6E473B] text-white px-6 py-3 rounded-md font-bold font-serif transition-colors duration-500 ease-in-out hover:bg-[#A78D78]">Shop Men</a>
 
-                <a href="/products?category=women"className="bg-[#6E473B] text-white px-6 py-3 rounded-md font-bold hover:bg-cocoa hover:text-cream transition">Shop Women</a>
+                <a href="/products?category=women"className="bg-[#6E473B] text-white px-6 py-3 rounded-md font-bold font-serif transition-colors duration-500 ease-in-out hover:bg-[#A78D78]">Shop Women</a>
             </div>
       </div>
     </section>
