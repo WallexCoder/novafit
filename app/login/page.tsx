@@ -61,7 +61,7 @@ export default function LoginPage() {
           </h2>
           <p className="text-cocoa/70 text-sm mb-8">
             New to NovaFit?{" "}
-            <a href="/register" className="text-camel font-semibold">
+            <a href="/register" className="text-black font-semibold hover:underline ">
               Create an account
             </a>
           </p>
