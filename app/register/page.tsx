@@ -37,9 +37,9 @@ export default function RegisterPage() {
       >
         <div className="absolute inset-0 bg-espresso/60" />
 
-        <h1 className="relative z-10 text-white text-5xl font-serif font-bold">
+        <a href="/"><h1 className="relative z-10 text-white text-5xl font-serif font-bold">
           NovaFit
-        </h1>
+        </h1></a>
 
         <div className="relative z-10">
           <p className="text-cream text-xl font-serif italic mb-2">
