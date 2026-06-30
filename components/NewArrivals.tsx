@@ -6,7 +6,7 @@ const products = [
     stars: "⭐⭐⭐⭐⭐",                                                
     price: 23800,
     image:
-      "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=500",
+      "https://i.pinimg.com/736x/b9/89/0a/b9890a356c9cd33a0dca2048c47e1b31.jpg",
   },
   {
     id: 2,
@@ -15,7 +15,7 @@ const products = [
     stars: "⭐⭐⭐⭐⭐",
     price: 34900,
     image:
-      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500",
+      "https://i.pinimg.com/736x/65/3a/e1/653ae1fab9aa3f38cfbca680ac701788.jpg",
   },
   {
     id: 3,
@@ -24,7 +24,7 @@ const products = [
     stars: "⭐⭐⭐⭐⭐",
     price: 33000,
     image:
-      "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=500",
+      "https://i.pinimg.com/736x/3e/59/dc/3e59dc1df59067513237369548119c46.jpg",
   },
   {
     id: 4,
@@ -33,7 +33,7 @@ const products = [
     stars: "⭐⭐⭐⭐⭐",
     price: 35500,
     image:
-      "https://images.unsplash.com/photo-1602810316693-3667c854239a?w=500",
+      "https://i.pinimg.com/736x/54/4f/57/544f5722335445d68f54d76f5b73de0e.jpg",
   },
   {
     id: 4,
@@ -42,7 +42,7 @@ const products = [
     stars: "⭐⭐⭐⭐⭐",
     price: 35500,
     image:
-      "https://images.unsplash.com/photo-1602810316693-3667c854239a?w=500",
+      "https://i.pinimg.com/736x/83/9f/61/839f61f294ab63658eb735c6614609c9.jpg",
   },
   {
     id: 4,
@@ -51,7 +51,7 @@ const products = [
     stars: "⭐⭐⭐⭐⭐",
     price: 35500,
     image:
-      "https://images.unsplash.com/photo-1602810316693-3667c854239a?w=500",
+      "https://i.pinimg.com/736x/88/22/6a/88226a36ab59af3e5bb48fae52eb7593.jpg",
   },
   {
     id: 4,
@@ -60,7 +60,7 @@ const products = [
     stars: "⭐⭐⭐⭐⭐",
     price: 35500,
     image:
-      "https://images.unsplash.com/photo-1602810316693-3667c854239a?w=500",
+      "https://i.pinimg.com/736x/f1/5b/be/f15bbe9085e970a8971330d9a2b9e47d.jpg",
   },
   {
     id: 4,
@@ -69,13 +69,13 @@ const products = [
     stars: "⭐⭐⭐⭐⭐",
     price: 35500,
     image:
-      "https://images.unsplash.com/photo-1602810316693-3667c854239a?w=500",
+      "https://i.pinimg.com/736x/7a/00/e6/7a00e6c6dc9332baf752e2cdf5f4ae1c.jpg",
   },
 ];
 
 export default function NewArrivals() {
   return (
-    <section className="py-16 px-6 md:px-12 bg-cream">
+    <section className="py-20 px-6 md:px-12 bg-cream">
       <div className="md:mx-32 flex items-end justify-between mb-10">
         <div>
           <p className="text-camel text-sm font-semibold uppercase tracking-widest mb-1">
@@ -102,7 +102,7 @@ export default function NewArrivals() {
             <img
               src={product.image}
               alt={product.name}
-              className="w-full h-56 object-cover"
+              className="w-full h-72 object-cover"
             />
             <div className="p-4">
               <p className="text-xs text-camel uppercase tracking-wide mb-1">
