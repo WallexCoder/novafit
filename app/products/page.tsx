@@ -1,13 +1,12 @@
 "use client";
 
 import { useState } from "react";
-const router = useRouter();
 import { useRouter } from "next/navigation";
-
 import Navbar from "@/components/Navbar";
 import StarRating from "@/components/StarRating";
 import Footer from "@/components/Footer";
 import api from "@/lib/api";
+
 
 const allProducts = [
   {
@@ -95,10 +94,12 @@ const allProducts = [
 const categories = ["All", "T-Shirts", "Shirts", "Hoodies", "Caps"];
 
 export default function ProductsPage() {
+  const router = useRouter();  // must be here, inside the function
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy, setSortBy] = useState("default");
   const [addedId, setAddedId] = useState<number | null>(null);
+  // ...rest of component
 
   const filtered = allProducts
     .filter((p) => {
