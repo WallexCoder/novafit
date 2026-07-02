@@ -6,7 +6,20 @@ import { useState, useEffect } from "react";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+const [user, setUser] = useState<any>(null);
 
+useEffect(() => {
+  const stored = localStorage.getItem("user");
+  if (stored) setUser(JSON.parse(stored));
+
+  const handleStorage = () => {
+    const u = localStorage.getItem("user");
+    setUser(u ? JSON.parse(u) : null);
+  };
+
+  window.addEventListener("storage", handleStorage);
+  return () => window.removeEventListener("storage", handleStorage);
+}, []);
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/products", label: "Shop" },

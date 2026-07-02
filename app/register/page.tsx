@@ -2,29 +2,41 @@
 
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import api from "@/lib/api";
+import Toast from "@/components/Toast";
 
 export default function RegisterPage() {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
-  const [error, setError] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+ const [form, setForm] = useState({ name: "", email: "", password: "" });
+const [error, setError] = useState("");
+const [showPassword, setShowPassword] = useState(false);
+const [toast, setToast] = useState("");  // add this line
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError("");
+ async function handleSubmit(e: React.FormEvent) {
+  e.preventDefault();
+  setError("");
 
-    if (!form.name || !form.email || !form.password) {
-      setError("All fields are required");
-      return;
-    }
-
-    // TODO: connect to real API once backend is ready
-    console.log("Register form submitted:", form);
+  if (!form.name || !form.email || !form.password) {
+    setError("All fields are required");
+    return;
   }
 
+  try {
+    const res = await api.post("/users/register", form);
+localStorage.setItem("token", res.data.token);
+localStorage.setItem("user", JSON.stringify(res.data.user));
+window.dispatchEvent(new Event("storage")); // add this line
+setToast("Account created successfully! Redirecting...");
+setTimeout(() => {
+  window.location.href = "/";
+}, 1500);
+  } catch (err: any) {
+    setError(err.response?.data?.message || "Registration failed");
+  }
+}
   return (
     <div className="min-h-screen flex">
       {/* Left side - image */}
@@ -130,6 +142,7 @@ export default function RegisterPage() {
           </p>
         </form>
       </div>
+      {toast && <Toast message={toast} onClose={() => setToast("")} />}
     </div>
   );
 }

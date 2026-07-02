@@ -2,28 +2,41 @@
 
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import api from "@/lib/api";
+import Toast from "@/components/Toast";
 
 export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [toast, setToast] = useState("");  // add this line
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError("");
+  async function handleSubmit(e: React.FormEvent) {
+  e.preventDefault();
+  setError("");
 
-    if (!form.email || !form.password) {
-      setError("Both fields are required");
-      return;
-    }
-
-    // TODO: connect to real API once backend is ready
-    console.log("Login form submitted:", form);
+  if (!form.email || !form.password) {
+    setError("Both fields are required");
+    return;
   }
+
+  try {
+    const res = await api.post("/users/login", form);
+localStorage.setItem("token", res.data.token);
+localStorage.setItem("user", JSON.stringify(res.data.user));
+window.dispatchEvent(new Event("storage")); // add this line
+setToast("Login successful! Redirecting...");
+setTimeout(() => {
+  window.location.href = "/";
+}, 1500);
+  } catch (err: any) {
+    setError(err.response?.data?.message || "Login failed");
+  }
+}
 
   return (
     <div className="min-h-screen flex ">
@@ -124,6 +137,7 @@ export default function LoginPage() {
           </p>
         </form>
       </div>
+      {toast && <Toast message={toast} onClose={() => setToast("")} />}
     </div>
   );
 }
