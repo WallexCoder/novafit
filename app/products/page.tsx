@@ -4,6 +4,7 @@ import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import StarRating from "@/components/StarRating";
 import Footer from "@/components/Footer";
+import api from "@/lib/api";
 
 const allProducts = [
   {
@@ -94,6 +95,7 @@ export default function ProductsPage() {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy, setSortBy] = useState("default");
+  const [addedId, setAddedId] = useState<number | null>(null);
 
   const filtered = allProducts
     .filter((p) => {
@@ -111,13 +113,34 @@ export default function ProductsPage() {
       return 0;
     });
 
+  async function handleAddToCart(e: React.MouseEvent, product: typeof allProducts[0]) {
+    e.preventDefault();
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      window.location.href = "/login";
+      return;
+    }
+
+    try {
+      await api.post("/cart", {
+        productId: product.id,
+        quantity: 1,
+        size: "M",
+      });
+      setAddedId(product.id);
+      setTimeout(() => setAddedId(null), 2000);
+    } catch (err: any) {
+      alert(err.response?.data?.message || "Failed to add to cart");
+    }
+  }
+
   return (
     <div>
       <Navbar />
 
       <main className="py-12 px-6 md:px-12 bg-cream min-h-screen">
         <div className="md:mx-32">
-          {/* Header */}
           <div className="mb-8">
             <p className="text-camel text-sm font-semibold uppercase tracking-widest mb-1">
               Browse
@@ -127,9 +150,7 @@ export default function ProductsPage() {
             </h1>
           </div>
 
-          {/* Filters Row */}
           <div className="flex flex-col md:flex-row gap-4 mb-8">
-            {/* Search */}
             <input
               type="text"
               placeholder="Search products..."
@@ -138,7 +159,6 @@ export default function ProductsPage() {
               className="border border-sand rounded-md px-4 py-2 outline-none focus:border-camel bg-white text-sm w-full md:w-64"
             />
 
-            {/* Category filter */}
             <div className="flex gap-2 flex-wrap">
               {categories.map((cat) => (
                 <button
@@ -155,7 +175,6 @@ export default function ProductsPage() {
               ))}
             </div>
 
-            {/* Sort */}
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
@@ -168,12 +187,10 @@ export default function ProductsPage() {
             </select>
           </div>
 
-          {/* Results count */}
           <p className="text-sm text-cocoa/60 mb-6">
             {filtered.length} product{filtered.length !== 1 ? "s" : ""} found
           </p>
 
-          {/* Product Grid */}
           {filtered.length === 0 ? (
             <div className="text-center py-20">
               <p className="text-cocoa/60 text-lg">No products found.</p>
@@ -190,8 +207,8 @@ export default function ProductsPage() {
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {filtered.map((product) => (
-                <a
-                  key={product.id}
+                
+                 <a key={product.id}
                   href={`/products/${product.id}`}
                   className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition"
                 >
@@ -215,8 +232,15 @@ export default function ProductsPage() {
                       <span className="font-bold text-espresso">
                         ₦{product.price.toLocaleString()}.99
                       </span>
-                      <button className="bg-cocoa text-cream text-xs font-medium px-3 py-2 rounded-md hover:bg-espresso transition">
-                        Add to Cart
+                      <button
+                        onClick={(e) => handleAddToCart(e, product)}
+                        className={`text-xs font-medium px-3 py-2 rounded-md transition ${
+                          addedId === product.id
+                            ? "bg-green-600 text-white"
+                            : "bg-cocoa text-cream hover:bg-espresso"
+                        }`}
+                      >
+                        {addedId === product.id ? "✓ Added!" : "Add to Cart"}
                       </button>
                     </div>
                   </div>

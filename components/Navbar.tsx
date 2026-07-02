@@ -1,47 +1,44 @@
 "use client";
 
-// import { useState } from "react";
-import { Search, ShoppingCart, Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
+import { Search, ShoppingCart, Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<any>(null);
+  const [cartCount, setCartCount] = useState(0);
 
-useEffect(() => {
-  const stored = localStorage.getItem("user");
-  if (stored) setUser(JSON.parse(stored));
+  useEffect(() => {
+    const stored = localStorage.getItem("user");
+    if (stored) setUser(JSON.parse(stored));
 
-  const handleStorage = () => {
-    const u = localStorage.getItem("user");
-    setUser(u ? JSON.parse(u) : null);
-  };
+    const handleStorage = () => {
+      const u = localStorage.getItem("user");
+      setUser(u ? JSON.parse(u) : null);
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      const count = cart.reduce((sum: number, item: any) => sum + item.quantity, 0);
+      setCartCount(count);
+    };
 
-  window.addEventListener("storage", handleStorage);
-  return () => window.removeEventListener("storage", handleStorage);
-}, []);
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    setCartCount(cart.reduce((sum: number, item: any) => sum + item.quantity, 0));
+
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
+
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/products", label: "Shop" },
     { href: "/products?sort=new", label: "New Arrivals" },
-    // { href: "/products?category=men", label: "Men" },
-    // { href: "/products?category=women", label: "Women" },
     { href: "/products?category=accessories", label: "Accessories" },
   ];
 
-  const [cartCount, setCartCount] = useState(0);
-
-useEffect(() => {
-  const updateCount = () => {
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    const count = cart.reduce((sum: number, item: any) => sum + item.quantity, 0);
-    setCartCount(count);
-  };
-
-  updateCount();
-  window.addEventListener("storage", updateCount);
-  return () => window.removeEventListener("storage", updateCount);
-}, []);
+  function handleLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.location.href = "/";
+  }
 
   return (
     <nav className="px-6 md:px-12 py-4 bg-cream font-serif relative">
@@ -60,21 +57,34 @@ useEffect(() => {
 
         <div className="hidden md:flex gap-5 items-center text-espresso">
           <Search size={30} className="cursor-pointer" />
-          
-            <a href="/login"
-            className="text-sm bg-[#6E473B] text-white px-6 py-3 rounded-md font-bold transition-colors duration-500 ease-in-out hover:bg-[#A78D78]"
-          >
-            Login
-          </a>
-          
-            <a href="/register"
-            className="text-sm bg-[#6E473B] text-white px-6 py-3 rounded-md font-bold transition-colors duration-500 ease-in-out hover:bg-[#A78D78]"
-          >
-            Register
-          </a>
-          {/* <a href="/cart">
-            <ShoppingCart size={30} className="cursor-pointer" />
-          </a> */}
+
+          {user ? (
+            <>
+              <span className="text-sm font-medium">Hi, {user.name}</span>
+              <button
+                onClick={handleLogout}
+                className="text-sm bg-[#6E473B] text-white px-6 py-3 rounded-md font-bold transition-colors duration-500 ease-in-out hover:bg-[#A78D78]"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              
+              <a  href="/login"
+                className="text-sm bg-[#6E473B] text-white px-6 py-3 rounded-md font-bold transition-colors duration-500 ease-in-out hover:bg-[#A78D78]"
+              >
+                Login
+              </a>
+              
+              <a  href="/register"
+                className="text-sm bg-[#6E473B] text-white px-6 py-3 rounded-md font-bold transition-colors duration-500 ease-in-out hover:bg-[#A78D78]"
+              >
+                Register
+              </a>
+            </>
+          )}
+
           <a href="/cart" className="relative">
             <ShoppingCart size={30} className="cursor-pointer" />
             {cartCount > 0 && (
@@ -85,7 +95,19 @@ useEffect(() => {
           </a>
         </div>
 
-        
+        <div className="flex md:hidden items-center gap-4 text-espresso">
+          <a href="/cart" className="relative">
+            <ShoppingCart size={26} className="cursor-pointer" />
+            {cartCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-cocoa text-cream text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
+                {cartCount}
+              </span>
+            )}
+          </a>
+          <button onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
+            {menuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
       </div>
 
       <div
@@ -111,18 +133,29 @@ useEffect(() => {
           </div>
 
           <div className="flex gap-3 pt-2">
-            
-              <a href="/login"
-              className="flex-1 text-center text-sm bg-[#6E473B] text-white px-6 py-3 rounded-md font-bold transition-colors duration-500 ease-in-out hover:bg-[#A78D78]"
-            >
-              Login
-            </a>
-            
-              <a href="/register"
-              className="flex-1 text-center text-sm bg-[#6E473B] text-white px-6 py-3 rounded-md font-bold transition-colors duration-500 ease-in-out hover:bg-[#A78D78]"
-            >
-              Register
-            </a>
+            {user ? (
+              <button
+                onClick={handleLogout}
+                className="flex-1 text-center text-sm bg-[#6E473B] text-white px-6 py-3 rounded-md font-bold transition-colors duration-500 ease-in-out hover:bg-[#A78D78]"
+              >
+                Logout
+              </button>
+            ) : (
+              <>
+                
+                <a  href="/login"
+                  className="flex-1 text-center text-sm bg-[#6E473B] text-white px-6 py-3 rounded-md font-bold transition-colors duration-500 ease-in-out hover:bg-[#A78D78]"
+                >
+                  Login
+                </a>
+                
+                <a  href="/register"
+                  className="flex-1 text-center text-sm bg-[#6E473B] text-white px-6 py-3 rounded-md font-bold transition-colors duration-500 ease-in-out hover:bg-[#A78D78]"
+                >
+                  Register
+                </a>
+              </>
+            )}
           </div>
         </div>
       </div>
