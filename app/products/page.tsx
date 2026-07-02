@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+const router = useRouter();
+import { useRouter } from "next/navigation";
+
 import Navbar from "@/components/Navbar";
 import StarRating from "@/components/StarRating";
 import Footer from "@/components/Footer";
@@ -118,7 +121,7 @@ export default function ProductsPage() {
 
     const token = localStorage.getItem("token");
     if (!token) {
-      window.location.href = "/login";
+      router.push("/login");
       return;
     }
 

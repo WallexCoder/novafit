@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import api from "@/lib/api";
 
 interface CartItem {
   id: number;
@@ -33,21 +34,30 @@ export default function CheckoutPage() {
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
+async function handlePlaceOrder(e: React.FormEvent) {
+  e.preventDefault();
 
-  function handlePlaceOrder(e: React.FormEvent) {
-    e.preventDefault();
+  const { fullName, email, phone, address, city, state } = form;
+  if (!fullName || !email || !phone || !address || !city || !state) {
+    alert("Please fill in all fields");
+    return;
+  }
 
-    const { fullName, email, phone, address, city, state } = form;
-    if (!fullName || !email || !phone || !address || !city || !state) {
-      alert("Please fill in all fields");
-      return;
-    }
+  const token = localStorage.getItem("token");
+  if (!token) {
+    window.location.href = "/login";
+    return;
+  }
 
-    // TODO: connect to real orders API once backend is ready
+  try {
+    await api.post("/orders");
     localStorage.removeItem("cart");
     window.dispatchEvent(new Event("storage"));
     setOrdered(true);
+  } catch (err: any) {
+    alert(err.response?.data?.message || "Failed to place order");
   }
+}
 
   const total = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
